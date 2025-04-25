@@ -1,4 +1,4 @@
-BINARY_NAME = telepresence
+BINARY_NAME = compose-telepresence
 BINARY_DIR = bin
 HOME_BIN_DIR = $(HOME)/bin
 VERSION = $(shell git describe --tags --always)
@@ -21,6 +21,7 @@ install: build
 .PHONY: clean
 clean:
 	rm -rf $(BINARY_DIR)
+	rm -f $(HOME_BIN_DIR)/$(BINARY_NAME)
 
 .PHONY: help
 help:
