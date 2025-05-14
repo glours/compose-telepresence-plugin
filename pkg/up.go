@@ -114,6 +114,10 @@ func createIntercept(opts PluginOptions) error {
 
 	err := cmd.Run()
 	if err != nil {
+		if strings.Contains(stderr.String(), "already exists") {
+			_ = sendInfo(fmt.Sprintf("Intercept %q already exists\n", opts.Name))
+			return nil
+		}
 		_ = sendErrorf("failed to create intercept %q: %s: %s", opts.Name, err, stderr.String())
 		return err
 	}

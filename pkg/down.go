@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"os/exec"
+	"strings"
 )
 
 // Down uninstalls telepresence helm chart and disconnects from the cluster
@@ -35,6 +36,10 @@ func deleteIntercept(options PluginOptions) error {
 	cmd.Stdout = &stdout
 
 	if err := cmd.Run(); err != nil {
+		if strings.Contains(stderr.String(), "traffic manager not found") || strings.Contains(stderr.String(), "Found no ") {
+			_ = sendInfo(fmt.Sprintf("Intercept %q already removed\n", options.Name))
+			return nil
+		}
 		_ = sendErrorf("failed to remove intercept %q: %s: %s", options.Name, err, stderr.String())
 		return err
 	}
