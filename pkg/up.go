@@ -61,7 +61,7 @@ func connectToCluster(opts PluginOptions) error {
 	var stderr, stdout bytes.Buffer
 	cmd.Stderr = &stderr
 	cmd.Stdout = &stdout
-
+	_ = sendDebug(fmt.Sprintf("connexion command: telepresence %s", strings.Join(args, " ")))
 	err := cmd.Run()
 	if err != nil {
 		if strings.Contains(stderr.String(), "traffic manager not found") {
@@ -85,7 +85,7 @@ func installTelepresenceChart(opts PluginOptions) error {
 	var stderr, stout bytes.Buffer
 	cmd.Stderr = &stderr
 	cmd.Stdout = &stout
-
+	_ = sendDebug(fmt.Sprintf("intallation command: telepresence %s", strings.Join(args, " ")))
 	err := cmd.Run()
 	if err != nil {
 		_ = sendErrorf("telepresence helm install failed: %s: %s", err, stderr.String())
@@ -112,6 +112,7 @@ func createIntercept(opts PluginOptions) error {
 	cmd.Stderr = &stderr
 	cmd.Stdout = &stdout
 
+	_ = sendDebug(fmt.Sprintf("intercept command: telepresence %s", strings.Join(args, " ")))
 	err := cmd.Run()
 	if err != nil {
 		if strings.Contains(stderr.String(), "already exists") {

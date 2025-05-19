@@ -49,3 +49,15 @@ func sendInfo(s string) error {
 	_, err = fmt.Println(string(marshal))
 	return err
 }
+
+func sendDebug(s string) error {
+	marshal, err := json.Marshal(jsonMessage{
+		Type:    "debug",
+		Message: s,
+	})
+	if err != nil {
+		return err
+	}
+	_, err = fmt.Println(string(marshal))
+	return err
+}

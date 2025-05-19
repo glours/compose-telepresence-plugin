@@ -61,6 +61,7 @@ func uninstallTelepresenceChart(options PluginOptions) error {
 	cmd.Stderr = &stderr
 	cmd.Stdout = &stdout
 
+	_ = sendDebug(fmt.Sprintf("unistall command: telepresence %s", strings.Join(args, " ")))
 	if err := cmd.Run(); err != nil {
 		_ = sendErrorf("telepresence helm uninstall failed: %s: %s", err, stderr.String())
 		return err
@@ -77,6 +78,7 @@ func disconnectFromCluster() error {
 	cmd.Stderr = &stderr
 	cmd.Stdout = &stdout
 
+	_ = sendDebug("disconnect command: telepresence quit")
 	if err := cmd.Run(); err != nil {
 		_ = sendErrorf("%s: %s", err, stderr.String())
 		return err
