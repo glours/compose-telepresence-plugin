@@ -46,10 +46,17 @@ func newComposeCmd() *cobra.Command {
 		Use:   "compose",
 		Short: "Manage Docker Compose operations",
 		Long:  `Manage Docker Compose operations with Telepresence integration.`,
+		Run: func(cmd *cobra.Command, args []string) {
+			_ = cmd.Help()
+			if len(args) > 0 {
+				log.Fatalf("unknown command %q\n", args[0])
+			}
+		},
 	}
 
 	cmd.AddCommand(newComposeUpCmd())
 	cmd.AddCommand(newComposeDownCmd())
+	cmd.AddCommand(newComposeMetadataCmd(cmd.Short, newComposeUpCmd(), newComposeDownCmd()))
 	cmd.PersistentFlags().String("project-name", "", "compose project name") // unused by model
 
 	return cmd
@@ -95,4 +102,16 @@ func newComposeDownCmd() *cobra.Command {
 		log.Fatal(err)
 	}
 	return cmd
+}
+
+func newComposeMetadataCmd(description string, up, down *cobra.Command) *cobra.Command {
+	return &cobra.Command{
+		Use:   "metadata",
+		Short: "Metadata for Docker Compose",
+		Run: func(cmd *cobra.Command, args []string) {
+			if err := pkg.Metadata(description, up, down); err != nil {
+				log.Fatal(err)
+			}
+		},
+	}
 }
